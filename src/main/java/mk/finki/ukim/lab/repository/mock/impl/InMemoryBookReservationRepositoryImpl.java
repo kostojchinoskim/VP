@@ -1,12 +1,12 @@
-package mk.finki.ukim.lab.repository.impl;
+package mk.finki.ukim.lab.repository.mock.impl;
 
 import mk.finki.ukim.lab.bootstrap.DataHolder;
 import mk.finki.ukim.lab.models.BookReservation;
-import mk.finki.ukim.lab.repository.BookReservationRepository;
+import mk.finki.ukim.lab.repository.mock.InMemoryBookReservationRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class InMemoryBookReservationRepository implements BookReservationRepository {
+public class InMemoryBookReservationRepositoryImpl implements InMemoryBookReservationRepository {
 
     @Override
     public BookReservation save(BookReservation reservation) {

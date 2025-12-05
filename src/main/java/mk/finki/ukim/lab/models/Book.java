@@ -1,27 +1,31 @@
 package mk.finki.ukim.lab.models;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 
+@Entity
 @Data
+@Getter @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Book {
-
-    private static long counter = 0;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String genre;
     private double averageRating;
+    @ManyToOne
     private Author author;
 
-
-    public Book(String title, String genre, double averageRating, Author author){
-        this.id = counter++;
+    public Book(String title, String genre, double averageRating) {
         this.title = title;
         this.genre = genre;
         this.averageRating = averageRating;
-        this.author = author;
     }
 
+    public String getAuthorName() {
+        return author != null  ? author.getName() + " " + author.getSurname() : "None";
+    }
 }

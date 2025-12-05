@@ -1,7 +1,7 @@
-package mk.finki.ukim.lab.repository;
+package mk.finki.ukim.lab.repository.mock;
 
 import mk.finki.ukim.lab.models.BookReservation;
 
-public interface BookReservationRepository {
+public interface InMemoryBookReservationRepository {
     BookReservation save(BookReservation reservation);
 }

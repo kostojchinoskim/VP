@@ -1,6 +1,8 @@
 package mk.finki.ukim.lab.web.controllers;
 
 
+import mk.finki.ukim.lab.models.Author;
+import mk.finki.ukim.lab.service.AuthorService;
 import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
 import mk.finki.ukim.lab.models.Book;
@@ -15,24 +17,43 @@ import java.util.List;
 public class BookController {
 
     private final BookService bookService;
+    private final AuthorService authorService;
 
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, AuthorService authorService) {
         this.bookService = bookService;
+        this.authorService = authorService;
     }
 
     @GetMapping
     public String getBooksPage(@RequestParam(required = false) String error,
-                               @RequestParam(required = false) String filterName,
-                               @RequestParam(required = false) String filterRating,
+                               @RequestParam(required = false) String filterAuthorId,
                                Model model,
                                HttpSession session)
     {
-        if (error != null) {
-            model.addAttribute ("error", error);
+        if(error != null) {
+            model.addAttribute("error", error);
         }
 
         List<Book> books;
-        model.addAttribute("books", bookService.listAll());
+//        List<String> lastViewed = (List<String>) session.getAttribute("lastViewed");
+
+        long authorId = -1L;
+        try {
+            authorId = Long.parseLong(filterAuthorId);
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        if(authorId != -1) {
+            books = bookService.findBooksByAuthorId(authorId);
+        } else {
+            books = bookService.listAll();
+        }
+
+        model.addAttribute("books", books);
+        //model.addAttribute("lastViewedBooks", lastViewed);
+        model.addAttribute("authors", authorService.findAll());
+        model.addAttribute("filteredId", authorId);
 
         return "listBooks";
     }
@@ -64,15 +85,18 @@ public class BookController {
         model.addAttribute("genre", book.getGenre());
         model.addAttribute("averageRating", book.getAverageRating());
         model.addAttribute("authorId", book.getAuthor().getId());
+        Author author = book.getAuthor();
+        model.addAttribute("authorId", author != null ? author.getId() : -1);
+        model.addAttribute("authors", authorService.findAll());
         return "book-form";
     }
 
     @PostMapping("/edit/{bookId}")
     public String editBook(@PathVariable Long bookId,
-                           @PathVariable String title,
-                           @PathVariable String genre,
-                           @PathVariable Double averageRating,
-                           @PathVariable Long authorId)
+                           @RequestParam String title,
+                           @RequestParam String genre,
+                           @RequestParam Double averageRating,
+                           @RequestParam Long authorId)
     {
         bookService.update(bookId, title, genre, averageRating, authorId);
         return "redirect:/books";

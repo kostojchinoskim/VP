@@ -31,19 +31,34 @@
     <h1>Welcome to our Book Reservation App</h1>
 </header>
 <main>
+    <form action="/books" method="GET">
+        <h2>Filter books by author:</h2>
+        <select name="filterAuthorId" required>
+            <option value="-1" th:selected="${filteredId == -1}">None</option>
+            <option th:each="author : ${authors}" th:value="${author.getId()}"
+                    th:text="${author.getName()} + ' ' + ${author.getSurname()}"
+                    th:selected="${filteredId == author.getId()}"></option>
+        </select>
+        <br />
+        <button type="submit">Filter</button>
+    </form>
+
     <form action="/bookReservation" method="POST">
         <h2>Choose a book:</h2>
+
         <div th:each="book : ${books}">
-            <input type="radio" class="book-option" name="bookTitle" th:value="${book.getTitle()}"
-                   th:text="'Title: ' + ${book.getTitle()} + ', Genre: ' + ${book.getGenre()} + ', Rating: ' + ${book.getAverageRating()} + ', Author: ' + ${book.getAuthor().getName()} + ' ' + ${book.getAuthor().getSurname()}" />
+            <div class="book-entry">
+                <input type="radio" class="book-option" name="bookTitle" th:value="${book.getTitle()}"
+                       th:text="'Title: ' + ${book.getTitle()} + ', Genre: ' + ${book.getGenre()} + ', Rating: ' + ${book.getAverageRating()} + ', Author: ' + ${book.getAuthorName()}" required/>
 
-            <button type="submit" name="edit" th:formaction="@{'/books/book-form/' + ${book.getId()}}" formmethod="get" formnovalidate>
-                Edit
-            </button>
+                <button type="submit" name="edit" th:formaction="@{'/books/book-form/' + ${book.getId()}}" formmethod="get" formnovalidate>
+                    Edit
+                </button>
 
-            <button type="submit" name="delete" th:formaction="@{'/books/delete/' + ${book.getId()}}" formmethod="post" formnovalidate>
-                Delete
-            </button>
+                <button type="submit" name="delete" th:formaction="@{'/books/delete/' + ${book.getId()}}" formmethod="post" formnovalidate>
+                    Delete
+                </button>
+            </div>
         </div>
 
         <button type="submit" name="addBook" formaction="/books/book-form" formmethod="get" formnovalidate>

@@ -1,9 +1,9 @@
-package mk.finki.ukim.lab.repository.impl;
+package mk.finki.ukim.lab.repository.mock.impl;
 
 import mk.finki.ukim.lab.bootstrap.DataHolder;
 import mk.finki.ukim.lab.models.Author;
 import mk.finki.ukim.lab.models.Book;
-import mk.finki.ukim.lab.repository.BookRepository;
+import mk.finki.ukim.lab.repository.mock.InMemoryBookRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Repository
-public class InMemoryBookRepository  implements BookRepository {
+public class InMemoryBookRepositoryImpl implements InMemoryBookRepository {
 
     @Override
     public List<Book> findAll() {
@@ -27,13 +27,20 @@ public class InMemoryBookRepository  implements BookRepository {
     }
 
     @Override
+    public List<Book> findAllByAuthor_Id(Long authorId) {
+        return DataHolder.books.stream()
+                .filter(book -> book.getAuthor() != null && book.getAuthor().getId().equals(authorId))
+                .toList();
+    }
+
+    @Override
     public Book findBook(Long id) {
         return DataHolder.books.stream().filter(book -> book.getId().equals(id)).findFirst().orElse(null);
     }
 
     @Override
     public Book add(String title, String genre, Double averageRating, Author author) {
-        Book book = new Book(title, genre, averageRating, author);
+        Book book = new Book(title, genre, averageRating);
         book.setAuthor(author);
         DataHolder.books.add(book);
         return book;
@@ -49,7 +56,7 @@ public class InMemoryBookRepository  implements BookRepository {
         if(idx == -1)
             return null;
 
-        Book book = new Book(title, genre, averageRating, author);
+        Book book = new Book(title, genre, averageRating);
         book.setAuthor(author);
         DataHolder.books.set(idx, book);
         return book;
