@@ -40,8 +40,9 @@
 
         <label>Author:</label>
         <select name="authorId">
-            <option th:each="author : ${authors}" th:value="${author.getId()}"
-                    th:text="${author.getName()} + ' ' + ${author.getSurname()}"
+            <option th:each="author : ${authors}"
+                    th:value="${author.getId()}"
+                    th:text="${author.getName() + ' ' + author.getSurname()}"
                     th:selected="${author.getId() == authorId}"></option>
         </select>
         <br />

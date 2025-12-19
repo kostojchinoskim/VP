@@ -17,6 +17,7 @@ public class AuthorServiceImpl implements AuthorService {
     public static List<Author> authors = new ArrayList<>();
 
     public AuthorServiceImpl(AuthorRepository authorRepository) {
+
         this.authorRepository = authorRepository;
     }
 

@@ -35,9 +35,9 @@ public class BookController {
         }
 
         List<Book> books;
-//        List<String> lastViewed = (List<String>) session.getAttribute("lastViewed");
+        List<String> lastViewed = (List<String>) session.getAttribute("lastViewed");
 
-        long authorId = -1L;
+        long authorId = -1;
         try {
             authorId = Long.parseLong(filterAuthorId);
         } catch(Exception e) {
@@ -50,8 +50,16 @@ public class BookController {
             books = bookService.listAll();
         }
 
+
+
+//        if(filterAuthorId != null && !filterAuthorId.isBlank()) {
+//            authorId = Long.parseLong(filterAuthorId);
+//        }
+
+
+
         model.addAttribute("books", books);
-        //model.addAttribute("lastViewedBooks", lastViewed);
+        model.addAttribute("lastViewedBooks", lastViewed);
         model.addAttribute("authors", authorService.findAll());
         model.addAttribute("filteredId", authorId);
 
@@ -60,15 +68,19 @@ public class BookController {
 
     @GetMapping("/book-form")
     public String getAddBookPage(Model model){
+        model.addAttribute("authors", authorService.findAll());
         return "book-form";
     }
 
     @PostMapping("/add")
     public String saveBook(@RequestParam String title,
                            @RequestParam String genre,
-                           @RequestParam Double averageRating,
-                           @RequestParam Long authorId)
+                           @RequestParam(required = false) Double averageRating,
+                           @RequestParam(required = false) Long authorId)
     {
+        if(averageRating == null || authorId == null){
+            return "redirect:/books?error=InvalidInput";
+        }
         bookService.add(title, genre, averageRating, authorId);
         return "redirect:/books";
     }
@@ -84,7 +96,6 @@ public class BookController {
         model.addAttribute("title", book.getTitle());
         model.addAttribute("genre", book.getGenre());
         model.addAttribute("averageRating", book.getAverageRating());
-        model.addAttribute("authorId", book.getAuthor().getId());
         Author author = book.getAuthor();
         model.addAttribute("authorId", author != null ? author.getId() : -1);
         model.addAttribute("authors", authorService.findAll());

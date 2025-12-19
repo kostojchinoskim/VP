@@ -19,6 +19,7 @@ public class Author {
     private String surname;
     private String country;
     private String biography;
+
     @OneToMany(mappedBy = "author")
     private List<Book> books = new ArrayList<>();
 

@@ -23,6 +23,7 @@ public class Book {
         this.title = title;
         this.genre = genre;
         this.averageRating = averageRating;
+
     }
 
     public String getAuthorName() {

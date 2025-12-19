@@ -62,6 +62,33 @@ public class InMemoryBookRepositoryImpl implements InMemoryBookRepository {
         return book;
     }
 
+
+//    @Override
+//    public Book add(String title, String genre, Double averageRating, Author author){
+//
+//        Book book = new Book(title, genre, averageRating, author);
+//        book.setId(DataHolder.bookIdCounter++);
+//        book.setAuthor(author);
+//
+//        DataHolder.books.add(book);
+//        return book;
+//    }
+//
+//    @Override
+//    public Book update(Long id, String title, String genre, Double averageRating, Author author) {
+//
+//        Book book = findBook(id);
+//        if (book == null) return null;
+//
+//        book.setTitle(title);
+//        book.setGenre(genre);
+//        book.setAverageRating(averageRating);
+//        book.setAuthor(author);
+//
+//        return book;
+//    }
+
+
     @Override
     public void delete(Long id) {
         DataHolder.books.removeIf(book -> book.getId().equals(id));

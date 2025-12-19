@@ -15,19 +15,22 @@ import java.util.List;
 public class DataHolder {
     public static List<Book> books = new ArrayList<>(10);
     public static List<BookReservation> reservations = new ArrayList<>();
-    public static List<Author> authors = new ArrayList<>();
+//    public static List<Author> authors = new ArrayList<>();
 
     private final BookRepository bookRepository;
+//    private final AuthorRepository authorRepository;
+    public static Long bookIdCounter = 1L;
 
-    public DataHolder(AuthorRepository authorRepository, BookRepository bookRepository) {
+    public DataHolder(BookRepository bookRepository) {
+
         this.bookRepository = bookRepository;
     }
 
     @PostConstruct
     public void init(){
 
-
         if(bookRepository.findAll().isEmpty()){
+            books = new ArrayList<>();
             books.add(new Book("The Great Gatsby", "Classic", 4.2));
             books.add(new Book("To Kill a Mockingbird", "Classic", 4.5));
             books.add(new Book("Dune",  "Fiction", 4.3));
@@ -40,6 +43,43 @@ public class DataHolder {
             books.add(new Book("The Martian", "Science Fiction", 4.5));
             bookRepository.saveAll(books);
         }
+
+//        if(authorRepository.findAll().isEmpty()){
+//            authors = new ArrayList<>();
+//            authors.add(new Author("J.K", "Rowling", "England", "J.K Rowling biography"));
+//            authors.add(new Author("J.R.R", "Tolkien", "England", "J.R.R Tolkien biography"));
+//            authors.add(new Author("George", "Orwell", "England", "George Orwell biography"));
+//            authors.add(new Author("Andy", "Weir", "United States", "Andy Weir biography"));
+//            authors.add(new Author("Douglas", "Adams", "England", "Douglas Adams biography"));
+//            authors.add(new Author("Aldous", "Huxley", "England", "Aldous Huxley biography"));
+//            authors.add(new Author("Mary", "Shelley", "England", "Mary Shelley biography"));
+//            authors.add(new Author("Frank", "Herbert", "United States", "Frank Herbert biography"));
+//            authors.add(new Author("Suzanne", "Collins", "United States", "Suzanne Collins biography"));
+//            authors.add(new Author("Arthur C.", "Clarke", "England", "Arthur C. Clarke biography"));
+//            authorRepository.saveAll(authors);
+//        }
+
+//        if(authorRepository.findAll().isEmpty()){
+//            authorRepository.saveAll(List.of(
+//               new Author("J.K", "Rowling", "England", "J.K Rowling biography"),
+//               new Author("J.R.R", "Tolkien", "England", "J.R.R Tolkien biography"),
+//               new Author("George", "Orwell", "England", "George Orwell biography"),
+//               new Author("Andy", "Weir", "United States", "Andy Weir biography"),
+//               new Author("Douglas", "Adams", "England", "Douglas Adams biography"),
+//               new Author("Aldous", "Huxley", "England", "Aldous Huxley biography"),
+//               new Author("Mary", "Shelley", "England", "Mary Shelley biography"),
+//               new Author("Frank", "Herbert", "United States", "Frank Herbert biography"),
+//               new Author("Suzanne", "Collins", "United States", "Suzanne Collins biography"),
+//               new Author("Arthur C.", "Clarke", "England", "Arthur C. Clarke biography")
+//            ));
+//        }
+//
+//        if(bookRepository.findAll().isEmpty()){
+//            bookRepository.save(
+//                    new Book("The Great Gatsby", "Classic", 4.2,authorRepository.findById(1L).get())
+//
+//            );
+//        }
 
     }
 }
